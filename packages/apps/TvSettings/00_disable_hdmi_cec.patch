@@ -1,0 +1,18 @@
+diff --git a/Settings/src/com/android/tv/settings/accessories/AddAccessoryActivity.java b/Settings/src/com/android/tv/settings/accessories/AddAccessoryActivity.java
+index 99978e8b..68f55816 100644
+--- a/Settings/src/com/android/tv/settings/accessories/AddAccessoryActivity.java
++++ b/Settings/src/com/android/tv/settings/accessories/AddAccessoryActivity.java
+@@ -218,13 +218,6 @@ public class AddAccessoryActivity extends Activity implements BluetoothDevicePai
+                     fm.getFragment(savedInstanceState,
+                             SAVED_STATE_CONTENT_FRAGMENT);
+         }
+-        sendCecOtpCommand((result) -> {
+-            if (result == HdmiControlManager.RESULT_SUCCESS) {
+-                Log.i(TAG, "One Touch Play successful");
+-            } else {
+-                Log.i(TAG, "One Touch Play failed");
+-            }
+-        });
+ 
+         rearrangeViews();
+     }

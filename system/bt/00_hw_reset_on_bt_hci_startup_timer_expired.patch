@@ -1,0 +1,33 @@
+diff --git a/hci/src/hci_layer.cc b/hci/src/hci_layer.cc
+index 976d91d56..3ac72cab0 100644
+--- a/hci/src/hci_layer.cc
++++ b/hci/src/hci_layer.cc
+@@ -375,6 +375,18 @@ static void event_finish_startup(UNUSED_ATTR void* context) {
+   startup_future = NULL;
+ }
+ 
++#include <fcntl.h>
++#include <sys/ioctl.h>
++static void hw_reset(bool reset) {
++  unsigned buf[8] = { 8 * 4, 0, 0x38041, 8, 8, 128, 0, 0};
++  buf[6] = reset ? 0 : 1;
++  int fd = open("/dev/vcio", 0);
++  if (fd >= 0) {
++    ioctl(fd, _IOWR(100, 0, char *), buf);
++    close(fd);
++  }
++}
++
+ static void startup_timer_expired(UNUSED_ATTR void* context) {
+   LOG_ERROR(LOG_TAG, "%s", __func__);
+ 
+@@ -386,6 +398,9 @@ static void startup_timer_expired(UNUSED_ATTR void* context) {
+     return;
+   }
+ 
++  hw_reset(true);
++  sleep(2);
++  hw_reset(false);
+   abort();
+ }
+ 
