@@ -1,0 +1,63 @@
+index f7c1c4bb6d96..2fa1ecb85572 100644
+--- a/core/java/android/net/LocalSocketImpl.java
++++ b/core/java/android/net/LocalSocketImpl.java
+@@ -19,6 +19,7 @@ package android.net;
+ import android.compat.annotation.UnsupportedAppUsage;
+ import android.os.Build;
+ import android.system.ErrnoException;
++import android.system.Int32Ref;
+ import android.system.Os;
+ import android.system.OsConstants;
+ import android.system.StructLinger;
+@@ -64,11 +65,14 @@ class LocalSocketImpl
+         public int available() throws IOException {
+             FileDescriptor myFd = fd;
+             if (myFd == null) throw new IOException("socket closed");
++
++            Int32Ref avail = new Int32Ref(0);
+             try {
+-                return Os.ioctlInt(myFd, OsConstants.FIONREAD);
++                Os.ioctlInt(myFd, OsConstants.FIONREAD, avail);
+             } catch (ErrnoException e) {
+                 throw e.rethrowAsIOException();
+             }
++           return avail.value;
+         }
+ 
+         /** {@inheritDoc} */
+diff --git a/services/core/java/com/android/server/connectivity/TcpKeepaliveController.java b/services/core/java/com/android/server/connectivity/TcpKeepaliveController.java
+index c480594b8c60..b5f20d70db7f 100644
+--- a/services/core/java/com/android/server/connectivity/TcpKeepaliveController.java
++++ b/services/core/java/com/android/server/connectivity/TcpKeepaliveController.java
+@@ -41,6 +41,7 @@ import android.os.Handler;
+ import android.os.MessageQueue;
+ import android.os.Messenger;
+ import android.system.ErrnoException;
++import android.system.Int32Ref;
+ import android.system.Os;
+ import android.util.Log;
+ import android.util.SparseArray;
+@@ -305,8 +306,9 @@ public class TcpKeepaliveController {
+ 
+     private static boolean isReceiveQueueEmpty(FileDescriptor fd)
+             throws ErrnoException {
+-        final int result = Os.ioctlInt(fd, SIOCINQ);
+-        if (result != 0) {
++        Int32Ref result = new Int32Ref(-1);
++        Os.ioctlInt(fd, SIOCINQ, result);
++        if (result.value != 0) {
+             Log.e(TAG, "Read queue has data");
+             return false;
+         }
+@@ -315,8 +317,9 @@ public class TcpKeepaliveController {
+ 
+     private static boolean isSendQueueEmpty(FileDescriptor fd)
+             throws ErrnoException {
+-        final int result = Os.ioctlInt(fd, SIOCOUTQ);
+-        if (result != 0) {
++        Int32Ref result = new Int32Ref(-1);
++        Os.ioctlInt(fd, SIOCOUTQ, result);
++        if (result.value != 0) {
+             Log.e(TAG, "Write queue has data");
+             return false;
+         }

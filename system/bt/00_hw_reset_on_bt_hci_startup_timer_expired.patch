@@ -1,8 +1,8 @@
 diff --git a/hci/src/hci_layer.cc b/hci/src/hci_layer.cc
-index 976d91d56..3ac72cab0 100644
+index aad341b1d..3670be491 100644
 --- a/hci/src/hci_layer.cc
 +++ b/hci/src/hci_layer.cc
-@@ -375,6 +375,18 @@ static void event_finish_startup(UNUSED_ATTR void* context) {
+@@ -373,6 +373,18 @@ static void event_finish_startup(UNUSED_ATTR void* context) {
    startup_future = NULL;
  }
  
@@ -19,9 +19,9 @@ index 976d91d56..3ac72cab0 100644
 +}
 +
  static void startup_timer_expired(UNUSED_ATTR void* context) {
-   LOG_ERROR(LOG_TAG, "%s", __func__);
+   LOG_ERROR("%s", __func__);
  
-@@ -386,6 +398,9 @@ static void startup_timer_expired(UNUSED_ATTR void* context) {
+@@ -384,6 +396,9 @@ static void startup_timer_expired(UNUSED_ATTR void* context) {
      return;
    }
  
