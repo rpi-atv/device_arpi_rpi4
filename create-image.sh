@@ -23,7 +23,7 @@ IMGSIZE=${1:-"8"}
 DATE=`date +%Y-%m-%d`
 IMGNAME=$DATE-rpi4.img
 BUILD_OUTPUT="./out/target/product/rpi4"
-KERNEL_VERSION="5.10/2021-04-10-rpi4-kernel-5.10-4525dbb"
+KERNEL_VERSION="4525dbb/2021-04-10-rpi4-kernel-5.10-4525dbb"
 KERNEL_BINARIES="https://github.com/rpi-atv/kernel_manifest/releases/download/${KERNEL_VERSION}.zip"
 
 if [ `id -u` != 0 ]; then
